@@ -1,4 +1,6 @@
-package com.accenture.assignmentweek;
+package com.accenture.assignmentweek.notused;
+
+import com.accenture.assignmentweek.Stock;
 
 import java.io.File;
 import java.io.FileNotFoundException;

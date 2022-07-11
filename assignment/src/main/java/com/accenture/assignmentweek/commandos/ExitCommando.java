@@ -7,7 +7,6 @@ public class ExitCommando implements Commando {
         System.exit(0);
     }
 
-    @Override
     public boolean shouldExecute(String commandoName) {
         return "exit".equalsIgnoreCase(commandoName);
     }

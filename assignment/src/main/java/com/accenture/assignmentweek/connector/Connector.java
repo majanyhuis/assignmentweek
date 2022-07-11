@@ -14,11 +14,10 @@ public class Connector {
         connectionProps.put("password", "secret");
 
         Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/bookapp",
+                "jdbc:mysql://localhost:3306/stocks",
                 connectionProps);
 
         System.out.println("Connected to database");
         return conn;
     }
-
 }

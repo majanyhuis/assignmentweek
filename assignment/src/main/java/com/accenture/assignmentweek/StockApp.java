@@ -2,6 +2,7 @@ package com.accenture.assignmentweek;
 
 import com.accenture.assignmentweek.commandos.Commando;
 import com.accenture.assignmentweek.commandos.ExitCommando;
+import com.accenture.assignmentweek.commandos.ImportCommando;
 import com.accenture.assignmentweek.connector.Connector;
 //import com.sun.jdi.connect.Connector;
 
@@ -14,7 +15,7 @@ import java.util.Scanner;
 
 public class StockApp {
 
-    public void run() throws SQLException {
+    public void run() throws SQLException, FileNotFoundException {
 
         Scanner scanner = new Scanner(System.in);
 
@@ -25,14 +26,16 @@ public class StockApp {
 
         // neue Kommandos!
         Commando exitCommando = new ExitCommando();
+        Commando importCommando = new ImportCommando();
 
         // Liste mit den Kommandos
         ArrayList<Commando> commandos = new ArrayList<>();
         commandos.add(exitCommando);
+        commandos.add(importCommando);
 
         while (true) {
             System.out.println("What do you want to do?");
-            System.out.println("Choose from the following commands: exit");
+            System.out.println("Choose from the following commands: exit, import");
             String userInput = scanner.nextLine();
 
             for (Commando commando : commandos) {
