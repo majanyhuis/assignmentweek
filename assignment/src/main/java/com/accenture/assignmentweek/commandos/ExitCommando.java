@@ -12,5 +12,4 @@ public class ExitCommando implements Commando {
         return "exit".equalsIgnoreCase(commandoName);
     }
 
-
 }
