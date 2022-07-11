@@ -1,6 +1,6 @@
 package com.accenture.assignmentweek;
 
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 
 public class Stock {
 
@@ -8,9 +8,9 @@ public class Stock {
 
     protected int idStock;
 
-    protected String price; // nochmal über Datentyp nachdenken!!!
+    protected double price; // nochmal über Datentyp nachdenken!!!
 
-    protected SimpleDateFormat date; // nochmal über Datentyp nachdenken!!!
+    protected LocalDate date; // nochmal über Datentyp nachdenken!!!
 
     protected int CompanyID;
     protected String companyName;
@@ -28,19 +28,19 @@ public class Stock {
         this.idStock = idStock;
     }
 
-    public String getPrice() {
+    public double getPrice() {
         return price;
     }
 
     public void setPrice(String price) {
-        this.price = price;
+        this.price = Double.parseDouble(price);
     }
 
-    public SimpleDateFormat getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(SimpleDateFormat date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

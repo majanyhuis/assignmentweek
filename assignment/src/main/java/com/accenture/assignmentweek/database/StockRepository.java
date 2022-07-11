@@ -2,10 +2,7 @@ package com.accenture.assignmentweek.database;
 
 import com.accenture.assignmentweek.Stock;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class StockRepository {
 
@@ -18,16 +15,21 @@ public class StockRepository {
     public void importStocks(Stock stock) {
         try {
             String sql = "insert into companies (companyname) values (?)";
-
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, stock.getCompanyName());
-            //preparedStatement.setString(2, stock.getDate());
             preparedStatement.executeUpdate();
 
             sql = "insert into industries (industry) values (?)";
             preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, stock.getIndustryName());
             preparedStatement.executeUpdate();
+
+            sql = "insert into stocks (price, date) values(?, ?)";
+            preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setDouble(1, stock.getPrice());
+            preparedStatement.setDate(2, Date.valueOf(stock.getDate()));
+            preparedStatement.executeUpdate();
+
 
 
         } catch (SQLException e) {
@@ -36,9 +38,16 @@ public class StockRepository {
     }
 
     public void deleteALL () throws SQLException {
-        String sql = "DELETE FROM companies" + "Delete FROM industries" + "Delete FROM stocks";
+        String sql = "DELETE FROM companies";
         PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         preparedStatement.execute();
-    }
 
+        sql = "DELETE FROM industries";
+        preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.execute();
+
+        sql = "DELETE FROM stocks";
+        preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.execute();
+    }
 }

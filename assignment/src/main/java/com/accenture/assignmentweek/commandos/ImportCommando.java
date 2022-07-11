@@ -5,8 +5,7 @@ import com.accenture.assignmentweek.database.StockRepository;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class ImportCommando implements Commando{
@@ -14,7 +13,7 @@ public class ImportCommando implements Commando{
     private StockRepository stockRepository;
     private Scanner scanner;
 
-    SimpleDateFormat simpleDateFormat;
+    LocalDate simpleDateFormat;
 
     public ImportCommando (StockRepository stockRepository, Scanner scanner) {
         this.stockRepository = stockRepository;
@@ -62,15 +61,19 @@ public class ImportCommando implements Commando{
             String month = split2[1];
             String year = split2[2];
 
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd");
             String dateNewFormat = "20" + year + "-" + month + "-" + day;
-            try {
-                simpleDateFormat.parse(dateNewFormat);
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
 
-            stock.setDate(simpleDateFormat);
+
+            LocalDate localDate = LocalDate.parse(dateNewFormat);
+
+//            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd");
+//            try {
+//                simpleDateFormat.parse(dateNewFormat);
+//            } catch (ParseException e) {
+//                throw new RuntimeException(e);
+//            }
+
+            stock.setDate(localDate);
 
             // update date format end.
 
