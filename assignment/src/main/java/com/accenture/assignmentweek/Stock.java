@@ -1,5 +1,7 @@
 package com.accenture.assignmentweek;
 
+import java.text.SimpleDateFormat;
+
 public class Stock {
 
     // hier wird das Objekt "Stock" kreiert...
@@ -8,7 +10,7 @@ public class Stock {
 
     protected String price; // nochmal über Datentyp nachdenken!!!
 
-    protected String date; // nochmal über Datentyp nachdenken!!!
+    protected SimpleDateFormat date; // nochmal über Datentyp nachdenken!!!
 
     protected int CompanyID;
     protected String companyName;
@@ -34,11 +36,11 @@ public class Stock {
         this.price = price;
     }
 
-    public String getDate() {
+    public SimpleDateFormat getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(SimpleDateFormat date) {
         this.date = date;
     }
 

@@ -5,6 +5,8 @@ import com.accenture.assignmentweek.database.StockRepository;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
 public class ImportCommando implements Commando{
@@ -12,9 +14,12 @@ public class ImportCommando implements Commando{
     private StockRepository stockRepository;
     private Scanner scanner;
 
+    SimpleDateFormat simpleDateFormat;
+
     public ImportCommando (StockRepository stockRepository, Scanner scanner) {
         this.stockRepository = stockRepository;
         this.scanner = scanner;
+
     }
 
     @Override
@@ -33,8 +38,42 @@ public class ImportCommando implements Commando{
 
             Stock stock = new Stock();
             stock.setCompanyName(split[0]);
-            stock.setPrice(split[1]);
-            stock.setDate(split[2]);
+
+            // update price format:
+            String priceFromFile = split[1];
+            priceFromFile = priceFromFile.replace("€", "");
+            priceFromFile= priceFromFile.replace(",",".");
+
+            stock.setPrice(priceFromFile);
+            // update price format end
+            // -> Methode schreiben!!!
+
+
+            // update date format:
+            // Date Format atm: dd.mm.yy
+            // -> yyyy-mm-dd
+
+            String dateFromFile = split[2];
+            stock.setDate(simpleDateFormat);
+
+            String[] split2 = dateFromFile.split("\\.");
+
+            String day = split2[0];
+            String month = split2[1];
+            String year = split2[2];
+
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd");
+            String dateNewFormat = "20" + year + "-" + month + "-" + day;
+            try {
+                simpleDateFormat.parse(dateNewFormat);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+
+            stock.setDate(simpleDateFormat);
+
+            // update date format end.
+
             stock.setIndustryName(split[3]);
 
             // zur Kontrolle:
