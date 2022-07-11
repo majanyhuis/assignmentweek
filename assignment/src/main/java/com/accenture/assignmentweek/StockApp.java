@@ -41,7 +41,7 @@ public class StockApp {
 
         while (true) {
             System.out.println("What do you want to do?");
-            System.out.println("Choose from the following commands: exit, import");
+            System.out.println("Choose from the following commands: exit, import, delete?");
             String userInput = scanner.nextLine();
 
             for (Commando commando : commandos) {
@@ -57,33 +57,13 @@ public class StockApp {
         StockApp stockApp = new StockApp();
         stockApp.run();
 
-        Scanner input = new Scanner(new File("STOCKDATA:txt"));
-
-        while (input.hasNext()) {
-
-            String test = input.nextLine();
-            System.out.println(test);
+//        Scanner input = new Scanner(new File("STOCKDATA:txt"));
+//
+//        while (input.hasNext()) {
+//
+//            String test = input.nextLine();
+//            System.out.println(test);
 
         }
     }
 
-    public SimpleDateFormat prepareDate (String dateFromFile) {
-
-        String[] split2 = dateFromFile.split("\\.");
-
-        String day = split2[0];
-        String month = split2[1];
-        String year = split2[2];
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd");
-        String dateNewFormat = "20" + year + "-" + month + "-" + day;
-        try {
-            simpleDateFormat.parse(dateNewFormat);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-        return simpleDateFormat;
-
-    }
-
-}

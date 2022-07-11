@@ -48,9 +48,7 @@ public class ImportCommando implements Commando{
             // -> Methode schreiben!!!
 
 
-            // update date format:
-            // Date Format atm: dd.mm.yy
-            // -> yyyy-mm-dd
+            // update date format:      Date Format atm: dd.mm.yy -> yyyy-mm-dd
 
             String dateFromFile = split[2];
             stock.setDate(simpleDateFormat);
@@ -63,18 +61,8 @@ public class ImportCommando implements Commando{
 
             String dateNewFormat = "20" + year + "-" + month + "-" + day;
 
-
             LocalDate localDate = LocalDate.parse(dateNewFormat);
-
-//            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd");
-//            try {
-//                simpleDateFormat.parse(dateNewFormat);
-//            } catch (ParseException e) {
-//                throw new RuntimeException(e);
-//            }
-
             stock.setDate(localDate);
-
             // update date format end.
 
             stock.setIndustryName(split[3]);
