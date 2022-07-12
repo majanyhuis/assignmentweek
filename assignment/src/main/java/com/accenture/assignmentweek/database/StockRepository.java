@@ -140,15 +140,33 @@ public class StockRepository {
         PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         preparedStatement.setString(1, searchInput);
 
-        ResultSet generatedKeys = preparedStatement.executeQuery();
-        generatedKeys.next();
+        ResultSet resultSet = preparedStatement.executeQuery();
 
-        while (generatedKeys.next()){
-            int companyID = generatedKeys.getInt(1);
-            String companyName = generatedKeys.getString(2);
+        while (resultSet.next()){
+            int companyID = resultSet.getInt(1);
+            String companyName = resultSet.getString(2);
 
             System.out.println("Company: " + companyName);
             System.out.println("ID: " + companyID);
+        }
+    }
+
+    public void showID (Scanner scanner) throws SQLException {
+
+        System.out.println("Please enter the company ID");
+        int companyID = scanner.nextInt();
+        String sql = "SELECT * FROM stocks WHERE idcompany = ?";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.setInt(1, companyID);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        while (resultSet.next()) {
+            Date date = resultSet.getDate(3);
+            double price = resultSet.getDouble(2);
+
+            System.out.println("Date: " + date + " -> " + "Price: " + price);
         }
     }
 }

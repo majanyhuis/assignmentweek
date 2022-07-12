@@ -31,7 +31,7 @@ public class StockApp {
         Commando deleteCommando = new DeleteCommando(stockRepository);
         Commando truncateCommando = new TruncateCommando(stockRepository);
         Commando searchCommando = new SearchCommando(stockRepository, scanner);
-        Commando showCommando = new ShowCommando();
+        Commando showCommando = new ShowCommando(stockRepository, scanner);
 
         // Liste mit den Kommandos
         ArrayList<Commando> commandos = new ArrayList<>();
@@ -44,7 +44,8 @@ public class StockApp {
 
         while (true) {
             System.out.println("What do you want to do?");
-            System.out.println("Choose from the following commands: exit, import, delete? Do not use: truncate.");
+            System.out.println("Choose from the following commands: exit, import, delete, search? " +
+                    "Do not use: truncate.");
             String userInput = scanner.nextLine();
 
             for (Commando commando : commandos) {
@@ -54,7 +55,6 @@ public class StockApp {
             }
         }
     }
-
 
     public static void main(String[] args) throws FileNotFoundException, SQLException {
         StockApp stockApp = new StockApp();

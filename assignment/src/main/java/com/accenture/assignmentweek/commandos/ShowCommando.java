@@ -1,25 +1,34 @@
 package com.accenture.assignmentweek.commandos;
 
+import com.accenture.assignmentweek.Stock;
+import com.accenture.assignmentweek.database.StockRepository;
+
 import java.io.FileNotFoundException;
+import java.sql.SQLException;
+import java.util.Scanner;
 
 public class ShowCommando implements Commando {
 
-//    String commandoName;
-//
-//    public ShowCommando(String commandoName) {
-//        this.commandoName = commandoName;
-//    }
+    public Scanner scanner;
+    public StockRepository stockRepository;
+
+    public ShowCommando(StockRepository stockRepository, Scanner scanner) {
+        this.scanner = scanner;
+        this.stockRepository = stockRepository;
+    }
 
     @Override
-    public void execute() throws FileNotFoundException {
+    public void execute() {
 
-        System.out.println("test show commando");
-
+        try {
+            stockRepository.showID(scanner);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public boolean shouldExecute(String commandoName) {
-        return commandoName.startsWith("show");
-        //return "show".startsWith("show");
+        return "show".equalsIgnoreCase(commandoName);
     }
 }
