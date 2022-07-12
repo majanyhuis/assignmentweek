@@ -1,9 +1,6 @@
 package com.accenture.assignmentweek;
 
-import com.accenture.assignmentweek.commandos.Commando;
-import com.accenture.assignmentweek.commandos.DeleteCommando;
-import com.accenture.assignmentweek.commandos.ExitCommando;
-import com.accenture.assignmentweek.commandos.ImportCommando;
+import com.accenture.assignmentweek.commandos.*;
 import com.accenture.assignmentweek.connector.Connector;
 import com.accenture.assignmentweek.database.StockRepository;
 //import com.sun.jdi.connect.Connector;
@@ -32,16 +29,20 @@ public class StockApp {
         Commando exitCommando = new ExitCommando();
         Commando importCommando = new ImportCommando(stockRepository, scanner);
         Commando deleteCommando = new DeleteCommando(stockRepository);
+        Commando truncateCommando = new TruncateCommando(stockRepository);
+        Commando searchCommando = new SearchCommando(stockRepository, scanner);
 
         // Liste mit den Kommandos
         ArrayList<Commando> commandos = new ArrayList<>();
         commandos.add(exitCommando);
         commandos.add(importCommando);
         commandos.add(deleteCommando);
+        commandos.add(truncateCommando);
+        commandos.add(searchCommando);
 
         while (true) {
             System.out.println("What do you want to do?");
-            System.out.println("Choose from the following commands: exit, import, delete?");
+            System.out.println("Choose from the following commands: exit, import, delete? Do not use: truncate.");
             String userInput = scanner.nextLine();
 
             for (Commando commando : commandos) {
