@@ -30,7 +30,7 @@ public class ImportCommando implements Commando{
 
         while (input.hasNext()) {
 
-            String test = input.nextLine();
+            String test = input.nextLine(); // #Variable TEST umbenennen!!!!
             System.out.println(test);
 
             String[] split = test.split(";");
