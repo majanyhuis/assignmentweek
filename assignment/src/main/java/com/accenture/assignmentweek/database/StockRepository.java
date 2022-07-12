@@ -142,9 +142,13 @@ public class StockRepository {
 
         ResultSet generatedKeys = preparedStatement.executeQuery();
         generatedKeys.next();
-        int companyID = generatedKeys.getInt(1);
-        String companyName = generatedKeys.getString(2);
-        System.out.println("Company: " + companyName);
-        System.out.println("ID: " + companyID);
+
+        while (generatedKeys.next()){
+            int companyID = generatedKeys.getInt(1);
+            String companyName = generatedKeys.getString(2);
+
+            System.out.println("Company: " + companyName);
+            System.out.println("ID: " + companyID);
+        }
     }
 }

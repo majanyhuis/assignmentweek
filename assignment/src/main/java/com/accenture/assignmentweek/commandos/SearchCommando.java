@@ -16,8 +16,6 @@ public class SearchCommando implements Commando{
         this.scanner = scanner;
     }
 
-
-
     @Override
     public void execute() {
 
@@ -26,7 +24,6 @@ public class SearchCommando implements Commando{
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     @Override

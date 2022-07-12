@@ -31,6 +31,7 @@ public class StockApp {
         Commando deleteCommando = new DeleteCommando(stockRepository);
         Commando truncateCommando = new TruncateCommando(stockRepository);
         Commando searchCommando = new SearchCommando(stockRepository, scanner);
+        Commando showCommando = new ShowCommando();
 
         // Liste mit den Kommandos
         ArrayList<Commando> commandos = new ArrayList<>();
@@ -39,6 +40,7 @@ public class StockApp {
         commandos.add(deleteCommando);
         commandos.add(truncateCommando);
         commandos.add(searchCommando);
+        commandos.add(showCommando);
 
         while (true) {
             System.out.println("What do you want to do?");
@@ -57,14 +59,6 @@ public class StockApp {
     public static void main(String[] args) throws FileNotFoundException, SQLException {
         StockApp stockApp = new StockApp();
         stockApp.run();
-
-//        Scanner input = new Scanner(new File("STOCKDATA:txt"));
-//
-//        while (input.hasNext()) {
-//
-//            String test = input.nextLine();
-//            System.out.println(test);
-
         }
     }
 
