@@ -18,7 +18,6 @@ public class ImportCommando implements Commando{
     public ImportCommando (StockRepository stockRepository, Scanner scanner) {
         this.stockRepository = stockRepository;
         this.scanner = scanner;
-
     }
 
     @Override
@@ -72,7 +71,6 @@ public class ImportCommando implements Commando{
             System.out.println(stock.getCompanyName() + stock.getPrice() + stock.getDate() + stock.getIndustryName());
 
             stockRepository.importStocks(stock);
-
         }
     }
 

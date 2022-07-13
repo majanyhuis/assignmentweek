@@ -17,9 +17,9 @@ public class StockRepository {
         try {
             //Tabelle INDUSTRY
             // Erstellen und initialisieren der Variablen idIndustry, für die Schleife und für später...
-            int idIndustry = 0; // muss die Variable hier wirklich initialisiert werden???
+            int idIndustry = 0; // muss die Variable hier wirklich initialisiert werden?
 
-            // Abfrage, ob die Industry schon in der Tabelle drin ist, falls ja count > 0; falls nein count 0
+            // Abfrage, ob die Industry schon in der Tabelle drin ist, falls ja count > 0; falls nein count = 0
             String sql = "select count(*) as cnt from industries where industry = ? ";
 
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -154,7 +154,9 @@ public class StockRepository {
     public void showID (Scanner scanner) throws SQLException {
 
         System.out.println("Please enter the company ID");
-        int companyID = scanner.nextInt();
+        String nextStringID = scanner.nextLine();
+        int companyID = Integer.parseInt(nextStringID);
+
         String sql = "SELECT * FROM stocks WHERE idcompany = ?";
 
         PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -166,7 +168,9 @@ public class StockRepository {
             Date date = resultSet.getDate(3);
             double price = resultSet.getDouble(2);
 
-            System.out.println("Date: " + date + " -> " + "Price: " + price);
+            System.out.println("Date: " + date + " -> " + "Price: " + price + " €");
         }
     }
+
+
 }

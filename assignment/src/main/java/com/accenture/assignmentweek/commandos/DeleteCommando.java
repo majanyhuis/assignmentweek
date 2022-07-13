@@ -13,7 +13,7 @@ public class DeleteCommando implements Commando  {
         this.stockRepository = stockRepository;
     }
 
-
+    @Override
     public void execute () {
 
         try {
@@ -21,11 +21,10 @@ public class DeleteCommando implements Commando  {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
         System.out.println("All data has been removed from database.");
-
     }
 
+    @Override
     public boolean shouldExecute(String commandoName) {
         return "delete".equalsIgnoreCase(commandoName);
     }

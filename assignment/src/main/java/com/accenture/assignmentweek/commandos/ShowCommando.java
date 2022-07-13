@@ -9,8 +9,8 @@ import java.util.Scanner;
 
 public class ShowCommando implements Commando {
 
-    public Scanner scanner;
-    public StockRepository stockRepository;
+    private Scanner scanner;
+    private StockRepository stockRepository;
 
     public ShowCommando(StockRepository stockRepository, Scanner scanner) {
         this.scanner = scanner;

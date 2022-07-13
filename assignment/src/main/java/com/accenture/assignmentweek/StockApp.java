@@ -32,6 +32,7 @@ public class StockApp {
         Commando truncateCommando = new TruncateCommando(stockRepository);
         Commando searchCommando = new SearchCommando(stockRepository, scanner);
         Commando showCommando = new ShowCommando(stockRepository, scanner);
+        Commando addCommando = new AddCommando(stockRepository, scanner);
 
         // Liste mit den Kommandos
         ArrayList<Commando> commandos = new ArrayList<>();
@@ -41,10 +42,11 @@ public class StockApp {
         commandos.add(truncateCommando);
         commandos.add(searchCommando);
         commandos.add(showCommando);
+        commandos.add(addCommando);
 
         while (true) {
             System.out.println("What do you want to do?");
-            System.out.println("Choose from the following commands: exit, import, delete, search? " +
+            System.out.println("Choose from the following commands: exit, import, delete, search, show? " +
                     "Do not use: truncate.");
             String userInput = scanner.nextLine();
 
