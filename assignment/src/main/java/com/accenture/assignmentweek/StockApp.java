@@ -25,7 +25,6 @@ public class StockApp {
         Connection connection = new Connector().getConnection();
         StockRepository stockRepository = new StockRepository(connection);
 
-        // neue Kommandos!
         Commando exitCommando = new ExitCommando();
         Commando importCommando = new ImportCommando(stockRepository, scanner);
         Commando deleteCommando = new DeleteCommando(stockRepository);
@@ -33,8 +32,9 @@ public class StockApp {
         Commando searchCommando = new SearchCommando(stockRepository, scanner);
         Commando showCommando = new ShowCommando(stockRepository, scanner);
         Commando addCommando = new AddCommando(stockRepository, scanner);
+        Commando maxCommando = new MaxCommando(stockRepository, scanner);
+        Commando minCommando = new MinCommando(stockRepository, scanner);
 
-        // Liste mit den Kommandos
         ArrayList<Commando> commandos = new ArrayList<>();
         commandos.add(exitCommando);
         commandos.add(importCommando);
@@ -43,10 +43,12 @@ public class StockApp {
         commandos.add(searchCommando);
         commandos.add(showCommando);
         commandos.add(addCommando);
+        commandos.add(maxCommando);
+        commandos.add(minCommando);
 
         while (true) {
             System.out.println("What do you want to do?");
-            System.out.println("Choose from the following commands: exit, import, delete, search, show? " +
+            System.out.println("Choose from the following commands: exit, import, delete, search, show, add? " +
                     "Do not use: truncate.");
             String userInput = scanner.nextLine();
 

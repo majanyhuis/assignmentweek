@@ -151,32 +151,35 @@ public class StockRepository {
         }
     }
 
-    public void showID (Scanner scanner) throws SQLException {
+    public void showID (Stock stock) throws SQLException {
 
-        System.out.println("Please enter the company ID");
-        String nextStringID = scanner.nextLine();
-        int companyID = Integer.parseInt(nextStringID);
-
-        String sql = "SELECT * FROM stocks WHERE idcompany = ?";
-
+        // hier EINMAL den Company Namen abfragen und einmal ausgeben!!! (übersichtlichkeit und so...)
+        String sql = "SELECT * FROM companies WHERE idcompany = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        preparedStatement.setInt(1, companyID);
+        preparedStatement.setInt(1, stock.getCompanyID());
 
         ResultSet resultSet = preparedStatement.executeQuery();
+        resultSet.next();
+
+        stock.setCompanyName(resultSet.getString(2));
+        System.out.println(stock.getCompanyName());
+
+        // Methode schreiben
+        sql = "SELECT * FROM stocks WHERE idcompany = ?";
+        preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.setInt(1, stock.getCompanyID());
+        resultSet = preparedStatement.executeQuery();
 
         while (resultSet.next()) {
             Date date = resultSet.getDate(3);
             double price = resultSet.getDouble(2);
+            int stocksid = resultSet.getInt(1);
 
-            System.out.println("Date: " + date + " -> " + "Price: " + price + " €");
+            System.out.println("Date: " + date + " -> " + "Price: " + price + " € " + "(idStock: " + stocksid + ")" );
         }
     }
 
     public void addStock (Stock stock) throws SQLException {
-
-        // STOCK hinzufügen
-        // "gegeben": ID, Price, Date -> stocks
-        // in einer Tabelle einfach die drei Werte hinzufügen... (weil Company und Industry existieren schon)
 
         String sql = "insert into stocks (price, date, idcompany) values (?, ?, ?)";
 
@@ -184,6 +187,32 @@ public class StockRepository {
         preparedStatement.setDouble(1, stock.getPrice());
         preparedStatement.setDate(2, Date.valueOf(stock.getDate()));
         preparedStatement.setInt(3, stock.getCompanyID());
-        preparedStatement.execute();
+        preparedStatement.executeUpdate();
+
+        System.out.println("Has been added to Database.");
     }
+
+    public void maxStock (Stock stock) throws SQLException {
+
+        String sql = "SELECT MAX(price) FROM stocks WHERE idcompany = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.setInt(1, stock.getCompanyID());
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        resultSet.next();
+        stock.setPrice(String.valueOf(resultSet.getDouble(1)));
+    }
+
+    public void minStock (Stock stock) throws SQLException {
+
+        String sql = "SELECT MIN(price) FROM stocks WHERE idcompany = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.setInt(1, stock.getCompanyID());
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        resultSet.next();
+
+        stock.setPrice(String.valueOf(resultSet.getDouble(1)));
+    }
+
 }

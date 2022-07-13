@@ -20,7 +20,6 @@ public class ImportCommando implements Commando{
         this.scanner = scanner;
     }
 
-    @Override
     public void execute() throws FileNotFoundException {
 
         Scanner input = new Scanner(new File("C:\\Users\\maja.nyhuis\\OneDrive - Accenture\\Documents\\Jump Start\\Assignment\\STOCK_DATA_3.csv"));

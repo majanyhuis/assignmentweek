@@ -28,11 +28,11 @@ public class AddCommando implements Commando {
         String nextString = scanner.nextLine();
         stock.setCompanyID(Integer.parseInt(nextString));
 
-        System.out.println("now Type in the date in format 'YYYY-DD-MM'");
+        System.out.println("Now Type in the date in format 'YYYY-MM-DD'");
         nextString = scanner.nextLine();
         stock.setDate(LocalDate.parse(nextString));
 
-        System.out.println("Last enter the price in format 'XXXX.XX'"); // vielelicht eher enter price und wenn nicht das format, dann sagen in welchem??
+        System.out.println("Last enter the price in format 'XXXX.XX'"); // vielleicht eher enter price und wenn nicht das format, dann sagen in welchem??
         nextString = scanner.nextLine();
         stock.setPrice(String.valueOf(Double.parseDouble(nextString)));
 
