@@ -172,5 +172,18 @@ public class StockRepository {
         }
     }
 
+    public void addStock (Stock stock) throws SQLException {
 
+        // STOCK hinzufügen
+        // "gegeben": ID, Price, Date -> stocks
+        // in einer Tabelle einfach die drei Werte hinzufügen... (weil Company und Industry existieren schon)
+
+        String sql = "insert into stocks (price, date, idcompany) values (?, ?, ?)";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.setDouble(1, stock.getPrice());
+        preparedStatement.setDate(2, Date.valueOf(stock.getDate()));
+        preparedStatement.setInt(3, stock.getCompanyID());
+        preparedStatement.execute();
+    }
 }
