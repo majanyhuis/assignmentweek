@@ -215,4 +215,31 @@ public class StockRepository {
         stock.setPrice(String.valueOf(resultSet.getDouble(1)));
     }
 
+    public void gapStock (Stock stock) throws SQLException {
+
+        String sql = "SELECT MAX(price) FROM stocks WHERE idcompany = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.setInt(1, stock.getCompanyID());
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        resultSet.next();
+        stock.setPrice(String.valueOf(resultSet.getDouble(1)));
+
+        double MAX = stock.getPrice();
+
+        sql = "SELECT MIN(price) FROM stocks WHERE idcompany = ?";
+        preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.setInt(1, stock.getCompanyID());
+
+        resultSet = preparedStatement.executeQuery();
+        resultSet.next();
+
+        double MIN = stock.getPrice();
+
+        double priceGap = MAX - MIN;
+        stock.setPrice(String.valueOf(priceGap));
+
+
+    }
+
 }

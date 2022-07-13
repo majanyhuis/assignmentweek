@@ -34,6 +34,7 @@ public class StockApp {
         Commando addCommando = new AddCommando(stockRepository, scanner);
         Commando maxCommando = new MaxCommando(stockRepository, scanner);
         Commando minCommando = new MinCommando(stockRepository, scanner);
+        Commando gapCommando = new GapCommando(stockRepository, scanner);
 
         ArrayList<Commando> commandos = new ArrayList<>();
         commandos.add(exitCommando);
@@ -45,6 +46,7 @@ public class StockApp {
         commandos.add(addCommando);
         commandos.add(maxCommando);
         commandos.add(minCommando);
+        commandos.add(gapCommando);
 
         while (true) {
             System.out.println("What do you want to do?");
