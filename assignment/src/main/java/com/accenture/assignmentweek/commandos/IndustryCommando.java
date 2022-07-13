@@ -7,12 +7,12 @@ import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-public class GapCommando implements Commando{
+public class IndustryCommando implements Commando {
 
     private StockRepository stockRepository;
     private Scanner scanner;
 
-    public GapCommando(StockRepository stockRepository, Scanner scanner) {
+    public IndustryCommando (StockRepository stockRepository, Scanner scanner) {
         this.stockRepository = stockRepository;
         this.scanner = scanner;
     }
@@ -22,21 +22,16 @@ public class GapCommando implements Commando{
 
         Stock stock = new Stock();
 
-        System.out.println("Please enter a company ID.");
-        String nextString = scanner.nextLine();
-        stock.setCompanyID(Integer.parseInt(nextString));
-
         try {
-            stockRepository.gapStock(stock);
+            stockRepository.industryList(stock);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        System.out.println("The difference between the highest and lowest price for the entered ID is: " + stock.getPrice() + " €.");
     }
 
     @Override
     public boolean shouldExecute(String commandoName) {
-        return "gap".equalsIgnoreCase(commandoName);
+        return "industry".equalsIgnoreCase(commandoName);
     }
 }

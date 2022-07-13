@@ -136,7 +136,6 @@ public class StockRepository {
         searchInput =  searchInput + "%";
 
         String sql = "SELECT * FROM companies WHERE company LIKE (?)";
-
         PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         preparedStatement.setString(1, searchInput);
 
@@ -175,7 +174,7 @@ public class StockRepository {
             double price = resultSet.getDouble(2);
             int stocksid = resultSet.getInt(1);
 
-            System.out.println("Date: " + date + " -> " + "Price: " + price + " € " + "(idStock: " + stocksid + ")" );
+            System.out.println("Date: " + date + " -> " + "Price: " + price + " € " + "(id: " + stocksid + ")" );
         }
     }
 
@@ -238,8 +237,49 @@ public class StockRepository {
 
         double priceGap = MAX - MIN;
         stock.setPrice(String.valueOf(priceGap));
-
-
     }
 
+    public void updateIndustry (Stock stock) throws SQLException {
+
+
+        String sql = "SELECT * FROM industries WHERE industry = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.setString(1, stock.getIndustryName());
+        ResultSet resultSet = preparedStatement.executeQuery();
+        resultSet.next();
+
+        stock.setIndustryID(resultSet.getInt(1));
+
+        System.out.println("test");
+
+        sql = "UPDATE companies SET idindustry = ? WHERE idcompany = ?";
+        preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.setInt(1, stock.getIndustryID());
+        preparedStatement.setInt(2, stock.getCompanyID());
+        preparedStatement.executeUpdate();
+    }
+
+    public void industryList (Stock stock) throws SQLException {
+
+        String sql = "SELECT * FROM industries";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        ResultSet resultSetIndustry = preparedStatement.executeQuery();
+
+
+        while (resultSetIndustry.next()) {
+
+           stock.setIndustryName(resultSetIndustry.getString(2));
+           stock.setIndustryID(resultSetIndustry.getInt(1));
+
+           sql = "select count(*) as cnt from companies where idindustry = ?";
+
+           preparedStatement = connection.prepareStatement(sql);
+           preparedStatement.setInt(1, stock.getIndustryID());
+           ResultSet resultSetCompany = preparedStatement.executeQuery();
+           resultSetCompany.next();
+           int count = resultSetCompany.getInt("cnt");
+
+           System.out.println("Industry: " + stock.getIndustryName() + ", ID: " + stock.getIndustryID() + ", -> "  + count);
+        }
+    }
 }

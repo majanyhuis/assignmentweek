@@ -35,6 +35,8 @@ public class StockApp {
         Commando maxCommando = new MaxCommando(stockRepository, scanner);
         Commando minCommando = new MinCommando(stockRepository, scanner);
         Commando gapCommando = new GapCommando(stockRepository, scanner);
+        Commando updateCommando = new UpdateCommando(stockRepository, scanner);
+        Commando industryCommando = new IndustryCommando(stockRepository, scanner);
 
         ArrayList<Commando> commandos = new ArrayList<>();
         commandos.add(exitCommando);
@@ -47,10 +49,12 @@ public class StockApp {
         commandos.add(maxCommando);
         commandos.add(minCommando);
         commandos.add(gapCommando);
+        commandos.add(updateCommando);
+        commandos.add(industryCommando);
 
         while (true) {
             System.out.println("What do you want to do?");
-            System.out.println("Choose from the following commands: exit, import, delete, search, show, add? " +
+            System.out.println("Choose from the following commands: exit, import, delete, search, show, add, max, min, gap, update, industry? " +
                     "Do not use: truncate.");
             String userInput = scanner.nextLine();
 
