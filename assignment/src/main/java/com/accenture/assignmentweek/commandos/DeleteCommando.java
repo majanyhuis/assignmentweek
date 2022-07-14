@@ -1,9 +1,8 @@
 package com.accenture.assignmentweek.commandos;
 
-import com.accenture.assignmentweek.database.StockRepository;
+import com.accenture.assignmentweek.repositories.StockRepository;
 
 import java.sql.SQLException;
-import java.util.Scanner;
 
 public class DeleteCommando implements Commando  {
 

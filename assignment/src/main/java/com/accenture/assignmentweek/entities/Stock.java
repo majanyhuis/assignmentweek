@@ -1,4 +1,4 @@
-package com.accenture.assignmentweek;
+package com.accenture.assignmentweek.entities;
 
 import java.time.LocalDate;
 

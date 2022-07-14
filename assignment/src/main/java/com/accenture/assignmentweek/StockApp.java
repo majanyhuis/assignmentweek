@@ -2,7 +2,7 @@ package com.accenture.assignmentweek;
 
 import com.accenture.assignmentweek.commandos.*;
 import com.accenture.assignmentweek.connector.Connector;
-import com.accenture.assignmentweek.database.StockRepository;
+import com.accenture.assignmentweek.repositories.StockRepository;
 
 import java.io.FileNotFoundException;
 import java.sql.Connection;

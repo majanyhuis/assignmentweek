@@ -12,5 +12,4 @@ public class ExitCommando implements Commando {
     public boolean shouldExecute(String commandoName) {
         return "exit".equalsIgnoreCase(commandoName);
     }
-
 }

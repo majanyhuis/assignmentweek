@@ -1,11 +1,11 @@
-package com.accenture.assignmentweek.database;
+package com.accenture.assignmentweek.repositories;
 
-import com.accenture.assignmentweek.Stock;
+import com.accenture.assignmentweek.entities.Stock;
 
 import java.sql.*;
-import java.util.Scanner;
+import java.util.List;
 
-public class StockRepository {
+public class StockRepository implements Crud<Stock, Integer> {
 
     private Connection connection;
 
@@ -19,15 +19,13 @@ public class StockRepository {
             int idIndustry;
 
             // Abfrage, ob die Industry schon in der Tabelle drin ist, falls ja count > 0; falls nein count = 0
-            String sql = "select count(*) as cnt from industries where industry = ? ";
-
+            String sql = "select count(*) as cnt from industries where industry = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, stock.getIndustryName());
 
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             int count = resultSet.getInt("cnt");
-
 
             if (count > 0) {
                 sql = "SELECT * FROM industries WHERE industry = (?)";
@@ -93,57 +91,51 @@ public class StockRepository {
         }
     }
 
-    public void deleteALL () throws SQLException {
+    public void deleteALL() throws SQLException {
         String sql = "DELETE FROM stocks";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        preparedStatement.execute();
+        executeQuery(sql);
 
         sql = "DELETE FROM companies";
-        preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        preparedStatement.execute();
+        executeQuery(sql);
 
         sql = "DELETE FROM industries";
-        preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        preparedStatement.execute();
+        executeQuery(sql);
     }
 
-    public void deleteAllWithAI () throws SQLException {
+    public void deleteAllWithAutoIncrement() throws SQLException {
         String sql = "DELETE FROM stocks";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        preparedStatement.execute();
+        executeQuery(sql);
+
         sql = "ALTER TABLE stocks AUTO_INCREMENT = 1";
-        preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        preparedStatement.execute();
+        executeQuery(sql);
 
         sql = "DELETE FROM companies";
-        preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        preparedStatement.execute();
+        executeQuery(sql);
+
         sql = "ALTER TABLE companies AUTO_INCREMENT = 1";
-        preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        preparedStatement.execute();
+        executeQuery(sql);
 
         sql = "DELETE FROM industries";
-        preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        preparedStatement.execute();
+        executeQuery(sql);
+
         sql = "ALTER TABLE industries AUTO_INCREMENT = 1;";
-        preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        executeQuery(sql);
+    }
+
+    private void executeQuery(String sql) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         preparedStatement.execute();
     }
 
 
-    public void searchCompany (Scanner scanner) throws SQLException {
-
-        System.out.println("Type a letter: ");
-        String searchInput = scanner.nextLine();
-        searchInput =  searchInput + "%";
+    public void searchCompany(String searchInput) throws SQLException {
 
         String sql = "SELECT * FROM companies WHERE company LIKE (?)";
         PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         preparedStatement.setString(1, searchInput);
-
         ResultSet resultSet = preparedStatement.executeQuery();
 
-        while (resultSet.next()){
+        while (resultSet.next()) {
             int companyID = resultSet.getInt(1);
             String companyName = resultSet.getString(2);
 
@@ -152,7 +144,7 @@ public class StockRepository {
         }
     }
 
-    public void showID (Stock stock) throws SQLException {
+    public void showID(Stock stock) throws SQLException {
 
         // hier EINMAL den Company Namen abfragen und einmal ausgeben! - nicht Teil der Aufgabe, übersichtlichkeit
         String sql = "SELECT * FROM companies WHERE idcompany = ?";
@@ -181,7 +173,7 @@ public class StockRepository {
         }
     }
 
-    public void addStock (Stock stock) throws SQLException {
+    public void addStock(Stock stock) throws SQLException {
 
         String sql = "insert into stocks (price, date, idcompany) values (?, ?, ?)";
 
@@ -194,7 +186,7 @@ public class StockRepository {
         System.out.println("Has been added to Database.");
     }
 
-    public void maxStock (Stock stock) throws SQLException {
+    public void maxStock(Stock stock) throws SQLException {
 
         String sql = "SELECT MAX(price) FROM stocks WHERE idcompany = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -205,7 +197,7 @@ public class StockRepository {
         stock.setPrice(resultSet.getDouble(1));
     }
 
-    public void minStock (Stock stock) throws SQLException {
+    public void minStock(Stock stock) throws SQLException {
 
         String sql = "SELECT MIN(price) FROM stocks WHERE idcompany = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -217,7 +209,7 @@ public class StockRepository {
         stock.setPrice(resultSet.getDouble(1));
     }
 
-    public void gapStock (Stock stock) throws SQLException {
+    public void gapStock(Stock stock) throws SQLException {
 
         String sql = "SELECT MAX(price) FROM stocks WHERE idcompany = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -242,7 +234,7 @@ public class StockRepository {
         stock.setPrice(priceGap);
     }
 
-    public void updateIndustry (Stock stock) throws SQLException {
+    public void updateIndustry(Stock stock) throws SQLException {
 
         String sql = "SELECT * FROM industries WHERE industry = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -259,7 +251,7 @@ public class StockRepository {
         preparedStatement.executeUpdate();
     }
 
-    public void industryList (Stock stock) throws SQLException {
+    public void industryList(Stock stock) throws SQLException {
 
         String sql = "SELECT * FROM industries";
         PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -267,18 +259,48 @@ public class StockRepository {
 
         while (resultSetIndustry.next()) {
 
-           stock.setIndustryName(resultSetIndustry.getString(2));
-           stock.setIndustryID(resultSetIndustry.getInt(1));
+            stock.setIndustryName(resultSetIndustry.getString(2));
+            stock.setIndustryID(resultSetIndustry.getInt(1));
 
-           sql = "select count(*) as cnt from companies where idindustry = ?";
+            sql = "select count(*) as cnt from companies where idindustry = ?";
 
-           preparedStatement = connection.prepareStatement(sql);
-           preparedStatement.setInt(1, stock.getIndustryID());
-           ResultSet resultSetCompany = preparedStatement.executeQuery();
-           resultSetCompany.next();
-           int count = resultSetCompany.getInt("cnt");
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, stock.getIndustryID());
+            ResultSet resultSetCompany = preparedStatement.executeQuery();
+            resultSetCompany.next();
+            int count = resultSetCompany.getInt("cnt");
 
-           System.out.println("Industry: " + stock.getIndustryName() + ", ID: " + stock.getIndustryID() + ", -> "  + count);
+            System.out.println("Industry: " + stock.getIndustryName() + ", ID: " + stock.getIndustryID() + ", -> " + count);
         }
+    }
+
+    @Override
+    public Stock findById(Integer id) {
+        return null;
+    }
+
+    @Override
+    public void deleteById(Integer id) {
+
+    }
+
+    @Override
+    public List<Stock> findAll() {
+        return null;
+    }
+
+    @Override
+    public List<Stock> findByProperty(String name, Integer id) {
+        return null;
+    }
+
+    @Override
+    public void create(Stock entity) {
+
+    }
+
+    @Override
+    public void update(Stock entity) {
+
     }
 }

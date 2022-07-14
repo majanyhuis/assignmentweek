@@ -1,6 +1,6 @@
 package com.accenture.assignmentweek.commandos;
 
-import com.accenture.assignmentweek.database.StockRepository;
+import com.accenture.assignmentweek.repositories.StockRepository;
 
 import java.sql.SQLException;
 
@@ -16,7 +16,7 @@ public class DeleteCommandoWithAI implements Commando{
     public void execute () {
 
         try {
-            stockRepository.deleteAllWithAI();
+            stockRepository.deleteAllWithAutoIncrement();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

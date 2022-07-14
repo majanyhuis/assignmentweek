@@ -1,8 +1,7 @@
 package com.accenture.assignmentweek.commandos;
 
-import com.accenture.assignmentweek.database.StockRepository;
+import com.accenture.assignmentweek.repositories.StockRepository;
 
-import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -19,8 +18,12 @@ public class SearchCommando implements Commando{
     @Override
     public void execute() {
 
+        System.out.println("Type a letter: ");
+        String searchInput = scanner.nextLine();
+        searchInput =  searchInput + "%";
+
         try {
-            stockRepository.searchCompany(scanner);
+            stockRepository.searchCompany(searchInput);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

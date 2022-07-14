@@ -1,9 +1,8 @@
 package com.accenture.assignmentweek.commandos;
 
-import com.accenture.assignmentweek.Stock;
-import com.accenture.assignmentweek.database.StockRepository;
+import com.accenture.assignmentweek.entities.Stock;
+import com.accenture.assignmentweek.repositories.StockRepository;
 
-import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.Scanner;
 
