@@ -1,9 +1,10 @@
 package com.accenture.assignmentweek.repositories;
 
 import com.accenture.assignmentweek.entities.Stock;
+import com.accenture.assignmentweek.services.MaxMinService;
+import com.accenture.assignmentweek.services.ShowService;
 
 import java.sql.*;
-import java.util.List;
 
 public class StockRepository {
 
@@ -12,6 +13,7 @@ public class StockRepository {
     public StockRepository(Connection connection) {
         this.connection = connection;
     }
+
 
     public void importStocks(Stock stock) {
         try {
@@ -146,32 +148,13 @@ public class StockRepository {
 
     public void showID(Stock stock) throws SQLException {
 
-        // hier EINMAL den Company Namen abfragen und einmal ausgeben! - nicht Teil der Aufgabe, übersichtlichkeit
-        String sql = "SELECT * FROM companies WHERE idcompany = ?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        preparedStatement.setInt(1, stock.getCompanyID());
+        ShowService showService = new ShowService(connection);
 
-        ResultSet resultSet = preparedStatement.executeQuery();
-        resultSet.next();
+        showService.showIdPrintCompany(stock);
+        showService.showIdPrintDateAndPrice(stock);
 
-        stock.setCompanyName(resultSet.getString(2));
-        System.out.println("The last ten prices for company " + stock.getCompanyName() + " (ID: " + stock.getCompanyID() + "):");
-
-        // Methode schreiben
-        sql = "SELECT * FROM stocks WHERE idcompany = ? ORDER BY date DESC";
-        preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        preparedStatement.setInt(1, stock.getCompanyID());
-        resultSet = preparedStatement.executeQuery();
-
-
-        for (int i = 0; i < 10 && resultSet.next(); i++) {
-            Date date = resultSet.getDate(3);
-            double price = resultSet.getDouble(2);
-            int stocksid = resultSet.getInt(1);
-
-            System.out.println("Date: " + date + " -> " + "Price: " + price + " € " + "(id: " + stocksid + ")");
-        }
     }
+
 
     public void addStock(Stock stock) throws SQLException {
 
@@ -188,46 +171,23 @@ public class StockRepository {
 
     public void maxStock(Stock stock) throws SQLException {
 
-        String sql = "SELECT MAX(price) FROM stocks WHERE idcompany = ?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        preparedStatement.setInt(1, stock.getCompanyID());
-
-        ResultSet resultSet = preparedStatement.executeQuery();
-        resultSet.next();
-        stock.setPrice(resultSet.getDouble(1));
+        MaxMinService maxMinService = new MaxMinService(connection);
+        maxMinService.getMax(stock);
     }
-
+    
     public void minStock(Stock stock) throws SQLException {
 
-        String sql = "SELECT MIN(price) FROM stocks WHERE idcompany = ?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        preparedStatement.setInt(1, stock.getCompanyID());
-
-        ResultSet resultSet = preparedStatement.executeQuery();
-        resultSet.next();
-
-        stock.setPrice(resultSet.getDouble(1));
+        MaxMinService maxMinService = new MaxMinService(connection);
+        maxMinService.getMin(stock);
     }
+
 
     public void gapStock(Stock stock) throws SQLException {
 
-        String sql = "SELECT MAX(price) FROM stocks WHERE idcompany = ?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        preparedStatement.setInt(1, stock.getCompanyID());
-
-        ResultSet resultSet = preparedStatement.executeQuery();
-        resultSet.next();
-        stock.setPrice(resultSet.getDouble(1));
-
+        maxStock(stock);
         double MAX = stock.getPrice();
 
-        sql = "SELECT MIN(price) FROM stocks WHERE idcompany = ?";
-        preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        preparedStatement.setInt(1, stock.getCompanyID());
-
-        resultSet = preparedStatement.executeQuery();
-        resultSet.next();
-
+        minStock(stock);
         double MIN = stock.getPrice();
 
         double priceGap = MAX - MIN;
