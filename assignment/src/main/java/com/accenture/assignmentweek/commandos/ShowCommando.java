@@ -12,6 +12,7 @@ public class ShowCommando implements Commando {
     private Scanner scanner;
     private StockRepository stockRepository;
 
+
     public ShowCommando(StockRepository stockRepository, Scanner scanner) {
         this.scanner = scanner;
         this.stockRepository = stockRepository;

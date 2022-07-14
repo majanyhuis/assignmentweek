@@ -1,8 +1,6 @@
 package com.accenture.assignmentweek.repositories;
 
 import com.accenture.assignmentweek.entities.Stock;
-import com.accenture.assignmentweek.services.MaxMinService;
-import com.accenture.assignmentweek.services.ShowService;
 
 import java.sql.*;
 
@@ -148,11 +146,36 @@ public class StockRepository {
 
     public void showID(Stock stock) throws SQLException {
 
-        ShowService showService = new ShowService(connection);
+        showIdPrintCompany(stock);
+        showIdPrintDateAndPrice(stock);
+    }
 
-        showService.showIdPrintCompany(stock);
-        showService.showIdPrintDateAndPrice(stock);
+    public void showIdPrintCompany(Stock stock) throws SQLException {
+        String sql = "SELECT * FROM companies WHERE idcompany = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.setInt(1, stock.getCompanyID());
 
+        ResultSet resultSet = preparedStatement.executeQuery();
+        resultSet.next();
+
+        stock.setCompanyName(resultSet.getString(2));
+        System.out.println("The last ten prices for company " + stock.getCompanyName() + " (ID: " + stock.getCompanyID() + "):");
+    }
+
+    public void showIdPrintDateAndPrice(Stock stock) throws SQLException {
+        String sql = "SELECT * FROM stocks WHERE idcompany = ? ORDER BY date DESC";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.setInt(1, stock.getCompanyID());
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+
+        for (int i = 0; i < 10 && resultSet.next(); i++) {
+            Date date = resultSet.getDate(3);
+            double price = resultSet.getDouble(2);
+            int stocksid = resultSet.getInt(1);
+
+            System.out.println("Date: " + date + " -> " + "Price: " + price + " € " + "(id: " + stocksid + ")");
+        }
     }
 
 
@@ -171,14 +194,25 @@ public class StockRepository {
 
     public void maxStock(Stock stock) throws SQLException {
 
-        MaxMinService maxMinService = new MaxMinService(connection);
-        maxMinService.getMax(stock);
+        String sql = "SELECT MAX(price) FROM stocks WHERE idcompany = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.setInt(1, stock.getCompanyID());
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        resultSet.next();
+        stock.setPrice(resultSet.getDouble(1));
     }
-    
+
     public void minStock(Stock stock) throws SQLException {
 
-        MaxMinService maxMinService = new MaxMinService(connection);
-        maxMinService.getMin(stock);
+        String sql = "SELECT MIN(price) FROM stocks WHERE idcompany = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.setInt(1, stock.getCompanyID());
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        resultSet.next();
+
+        stock.setPrice(resultSet.getDouble(1));
     }
 
 
