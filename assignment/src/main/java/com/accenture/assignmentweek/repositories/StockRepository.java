@@ -5,7 +5,7 @@ import com.accenture.assignmentweek.entities.Stock;
 import java.sql.*;
 import java.util.List;
 
-public class StockRepository implements Crud<Stock, Integer> {
+public class StockRepository {
 
     private Connection connection;
 
@@ -272,35 +272,5 @@ public class StockRepository implements Crud<Stock, Integer> {
 
             System.out.println("Industry: " + stock.getIndustryName() + ", ID: " + stock.getIndustryID() + ", -> " + count);
         }
-    }
-
-    @Override
-    public Stock findById(Integer id) {
-        return null;
-    }
-
-    @Override
-    public void deleteById(Integer id) {
-
-    }
-
-    @Override
-    public List<Stock> findAll() {
-        return null;
-    }
-
-    @Override
-    public List<Stock> findByProperty(String name, Integer id) {
-        return null;
-    }
-
-    @Override
-    public void create(Stock entity) {
-
-    }
-
-    @Override
-    public void update(Stock entity) {
-
     }
 }
