@@ -50,7 +50,7 @@ public class StockApp {
 
         while (true) {
             System.out.println("What do you want to do?");
-            System.out.println("Choose from the following commands: exit, import, delete, search, show, " +
+            System.out.println("Choose from the following commands: exit, import, delete, delete with AI, search, show, " +
                     "add, max, min, gap, update, industry? ");
             String userInput = scanner.nextLine();
 

@@ -16,7 +16,7 @@ public class StockRepository {
     public void importStocks(Stock stock) {
         try {
             //Tabelle INDUSTRY
-            int idIndustry;
+            int doesIndustryExist;
 
             // Abfrage, ob die Industry schon in der Tabelle drin ist, falls ja count > 0; falls nein count = 0
             String sql = "select count(*) as cnt from industries where industry = ?";
@@ -34,7 +34,7 @@ public class StockRepository {
 
                 ResultSet generatedKeys = preparedStatement.executeQuery();
                 generatedKeys.next();
-                idIndustry = generatedKeys.getInt(1);
+                doesIndustryExist = generatedKeys.getInt(1);
             } else {
                 sql = "insert into industries (industry) values (?)";
                 preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -43,11 +43,11 @@ public class StockRepository {
 
                 ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
                 generatedKeys.next();
-                idIndustry = generatedKeys.getInt(1);
+                doesIndustryExist = generatedKeys.getInt(1);
             }
 
             // Tabelle COMPANIES
-            int idCompany;
+            int doesCompanyExist;
 
             sql = "select count(*) as cnt from companies where company = ? ";
             preparedStatement = connection.prepareStatement(sql);
@@ -65,25 +65,25 @@ public class StockRepository {
 
                 ResultSet generatedKeys = preparedStatement.executeQuery();
                 generatedKeys.next();
-                idCompany = generatedKeys.getInt(1);
+                doesCompanyExist = generatedKeys.getInt(1);
             } else {
                 // count ist 0 -> neue Company wird angelegt ...
                 sql = "insert into companies (company, idindustry) values (?, ?)";
                 preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 preparedStatement.setString(1, stock.getCompanyName());
-                preparedStatement.setInt(2, idIndustry);
+                preparedStatement.setInt(2, doesIndustryExist);
                 preparedStatement.executeUpdate();
 
                 ResultSet generatedKeys2 = preparedStatement.getGeneratedKeys();
                 generatedKeys2.next();
-                idCompany = generatedKeys2.getInt(1);
+                doesCompanyExist = generatedKeys2.getInt(1);
             }
 
             sql = "insert into stocks (price, date, idcompany) values (?, ?, ?)";
             preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setDouble(1, stock.getPrice());
             preparedStatement.setDate(2, Date.valueOf(stock.getDate()));
-            preparedStatement.setInt(3, idCompany);
+            preparedStatement.setInt(3, doesCompanyExist);
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {

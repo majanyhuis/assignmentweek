@@ -34,7 +34,7 @@ public class AddCommando implements Commando {
 
         System.out.println("Last enter the price in format 'XXXX.XX'"); // vielleicht eher enter price und wenn nicht das format, dann sagen in welchem??
         nextString = scanner.nextLine();
-        stock.setPrice(String.valueOf(Double.parseDouble(nextString)));
+        stock.setPrice(Double.parseDouble(nextString));
 
         try {
             stockRepository.addStock(stock);

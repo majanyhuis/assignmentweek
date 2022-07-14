@@ -34,36 +34,38 @@ public class ImportCommando implements Commando{
             Stock stock = new Stock();
             stock.setCompanyName(split[0]);
 
-            // update price format:
             String priceFromFile = split[1];
-            priceFromFile = priceFromFile.replace("€", "");
-            priceFromFile= priceFromFile.replace(",",".");
+            setPrice(priceFromFile, stock);
 
-            stock.setPrice(Double.parseDouble(priceFromFile));
-            // update price format end
-            // -> Methode schreiben!!!
-
-
-            // update date format:      Date Format atm: dd.mm.yy -> yyyy-mm-dd
             String dateFromFile = split[2];
-            stock.setDate(simpleDateFormat);
-
-            String[] split2 = dateFromFile.split("\\.");
-
-            String day = split2[0];
-            String month = split2[1];
-            String year = split2[2];
-
-            String dateNewFormat = "20" + year + "-" + month + "-" + day;
-
-            LocalDate localDate = LocalDate.parse(dateNewFormat);
-            stock.setDate(localDate);
-            // update date format end.
+            setDate(dateFromFile, stock);
 
             stock.setIndustryName(split[3]);
 
             stockRepository.importStocks(stock);
         }
+    }
+
+    private void setPrice(String priceFromFile, Stock stock) {
+        priceFromFile = priceFromFile.replace("€", "");
+        priceFromFile= priceFromFile.replace(",",".");
+
+        stock.setPrice(Double.parseDouble(priceFromFile));
+    }
+
+    private void setDate(String dateFromFile, Stock stock) {
+        stock.setDate(simpleDateFormat);
+
+        String[] split2 = dateFromFile.split("\\.");
+
+        String day = split2[0];
+        String month = split2[1];
+        String year = split2[2];
+
+        String dateNewFormat = "20" + year + "-" + month + "-" + day;
+
+        LocalDate localDate = LocalDate.parse(dateNewFormat);
+        stock.setDate(localDate);
     }
 
     @Override
