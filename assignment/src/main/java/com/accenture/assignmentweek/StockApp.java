@@ -3,14 +3,10 @@ package com.accenture.assignmentweek;
 import com.accenture.assignmentweek.commandos.*;
 import com.accenture.assignmentweek.connector.Connector;
 import com.accenture.assignmentweek.database.StockRepository;
-//import com.sun.jdi.connect.Connector;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -28,7 +24,7 @@ public class StockApp {
         Commando exitCommando = new ExitCommando();
         Commando importCommando = new ImportCommando(stockRepository, scanner);
         Commando deleteCommando = new DeleteCommando(stockRepository);
-        Commando truncateCommando = new TruncateCommando(stockRepository);
+        Commando deleteCommandoWithAI = new DeleteCommandoWithAI(stockRepository);
         Commando searchCommando = new SearchCommando(stockRepository, scanner);
         Commando showCommando = new ShowCommando(stockRepository, scanner);
         Commando addCommando = new AddCommando(stockRepository, scanner);
@@ -42,7 +38,6 @@ public class StockApp {
         commandos.add(exitCommando);
         commandos.add(importCommando);
         commandos.add(deleteCommando);
-        commandos.add(truncateCommando);
         commandos.add(searchCommando);
         commandos.add(showCommando);
         commandos.add(addCommando);
@@ -51,11 +46,12 @@ public class StockApp {
         commandos.add(gapCommando);
         commandos.add(updateCommando);
         commandos.add(industryCommando);
+        commandos.add(deleteCommandoWithAI);
 
         while (true) {
             System.out.println("What do you want to do?");
-            System.out.println("Choose from the following commands: exit, import, delete, search, show, add, max, min, gap, update, industry? " +
-                    "Do not use: truncate.");
+            System.out.println("Choose from the following commands: exit, import, delete, search, show, " +
+                    "add, max, min, gap, update, industry? ");
             String userInput = scanner.nextLine();
 
             for (Commando commando : commandos) {

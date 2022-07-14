@@ -115,19 +115,29 @@ public class StockRepository {
         preparedStatement.execute();
     }
 
-    public void truncateALL () throws SQLException {
-        String sql = "TRUNCATE TABLE stocks";
+    public void deleteAllWithAI () throws SQLException {
+        String sql = "DELETE FROM stocks";
         PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         preparedStatement.execute();
-
-        sql = "TRUNCATE TABLE companies";
+        sql = "ALTER TABLE stocks AUTO_INCREMENT = 1";
         preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         preparedStatement.execute();
 
-        sql = "TRUNCATE TABLE industries";
+        sql = "DELETE FROM companies";
+        preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.execute();
+        sql = "ALTER TABLE companies AUTO_INCREMENT = 1";
+        preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.execute();
+
+        sql = "DELETE FROM industries";
+        preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.execute();
+        sql = "ALTER TABLE industries AUTO_INCREMENT = 1;";
         preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         preparedStatement.execute();
     }
+
 
     public void searchCompany (Scanner scanner) throws SQLException {
 
@@ -161,20 +171,21 @@ public class StockRepository {
         resultSet.next();
 
         stock.setCompanyName(resultSet.getString(2));
-        System.out.println(stock.getCompanyName());
+        System.out.println("The last ten prices for company " + stock.getCompanyName() + " (ID: " + stock.getCompanyID() + "):");
 
         // Methode schreiben
-        sql = "SELECT * FROM stocks WHERE idcompany = ?";
+        sql = "SELECT * FROM stocks WHERE idcompany = ? ORDER BY date DESC";
         preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         preparedStatement.setInt(1, stock.getCompanyID());
         resultSet = preparedStatement.executeQuery();
 
-        while (resultSet.next()) {
+
+        for (int i = 0; i < 10 && resultSet.next(); i++) {
             Date date = resultSet.getDate(3);
             double price = resultSet.getDouble(2);
             int stocksid = resultSet.getInt(1);
 
-            System.out.println("Date: " + date + " -> " + "Price: " + price + " € " + "(id: " + stocksid + ")" );
+            System.out.println("Date: " + date + " -> " + "Price: " + price + " € " + "(id: " + stocksid + ")");
         }
     }
 

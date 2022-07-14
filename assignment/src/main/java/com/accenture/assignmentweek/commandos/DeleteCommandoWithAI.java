@@ -4,29 +4,27 @@ import com.accenture.assignmentweek.database.StockRepository;
 
 import java.sql.SQLException;
 
-public class TruncateCommando implements Commando {
+public class DeleteCommandoWithAI implements Commando{
 
     private StockRepository stockRepository;
 
-    public TruncateCommando (StockRepository stockRepository) {
+    public DeleteCommandoWithAI (StockRepository stockRepository) {
         this.stockRepository = stockRepository;
     }
 
-
+    @Override
     public void execute () {
 
         try {
-            stockRepository.truncateALL();
+            stockRepository.deleteAllWithAI();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-        System.out.println("All data has been removed from database with truncate-Commando.");
-
+        System.out.println("All data has been removed from database. IDs start with 1 again. Import your Data with 'import'.");
     }
 
+    @Override
     public boolean shouldExecute(String commandoName) {
-        return "truncate".equalsIgnoreCase(commandoName);
+        return "deleteAI".equalsIgnoreCase(commandoName);
     }
-
 }

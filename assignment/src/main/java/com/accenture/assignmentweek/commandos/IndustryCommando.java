@@ -27,7 +27,6 @@ public class IndustryCommando implements Commando {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     @Override
