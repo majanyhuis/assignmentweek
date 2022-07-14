@@ -23,15 +23,13 @@ public class ImportCommando implements Commando{
     public void execute() throws FileNotFoundException {
 
         Scanner input = new Scanner(new File("C:\\Users\\maja.nyhuis\\OneDrive - Accenture\\Documents\\Jump Start\\Assignment\\STOCK_DATA_3.csv"));
-
-        String ignoreLine = input.nextLine();
+                input.nextLine();
 
         while (input.hasNext()) {
 
-            String test = input.nextLine(); // #Variable TEST umbenennen!!!!
-            System.out.println(test);
-
-            String[] split = test.split(";");
+            String line = input.nextLine();
+            System.out.println(line);
+            String[] split = line.split(";");
 
             Stock stock = new Stock();
             stock.setCompanyName(split[0]);
@@ -41,13 +39,12 @@ public class ImportCommando implements Commando{
             priceFromFile = priceFromFile.replace("€", "");
             priceFromFile= priceFromFile.replace(",",".");
 
-            stock.setPrice(priceFromFile);
+            stock.setPrice(Double.parseDouble(priceFromFile));
             // update price format end
             // -> Methode schreiben!!!
 
 
             // update date format:      Date Format atm: dd.mm.yy -> yyyy-mm-dd
-
             String dateFromFile = split[2];
             stock.setDate(simpleDateFormat);
 
@@ -64,10 +61,6 @@ public class ImportCommando implements Commando{
             // update date format end.
 
             stock.setIndustryName(split[3]);
-
-            // zur Kontrolle:
-            // kann später gelöscht werden!!!
-            System.out.println(stock.getCompanyName() + stock.getPrice() + stock.getDate() + stock.getIndustryName());
 
             stockRepository.importStocks(stock);
         }

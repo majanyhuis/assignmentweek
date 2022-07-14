@@ -16,8 +16,7 @@ public class StockRepository {
     public void importStocks(Stock stock) {
         try {
             //Tabelle INDUSTRY
-            // Erstellen und initialisieren der Variablen idIndustry, für die Schleife und für später...
-            int idIndustry = 0; // muss die Variable hier wirklich initialisiert werden?
+            int idIndustry;
 
             // Abfrage, ob die Industry schon in der Tabelle drin ist, falls ja count > 0; falls nein count = 0
             String sql = "select count(*) as cnt from industries where industry = ? ";
@@ -29,10 +28,8 @@ public class StockRepository {
             resultSet.next();
             int count = resultSet.getInt("cnt");
 
-            System.out.println("Industry Count" + count); // löschen, nur zur Kontrolle!!!
 
             if (count > 0) {
-                // gib mir die ID von der INDUSTRY!!!
                 sql = "SELECT * FROM industries WHERE industry = (?)";
                 preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 preparedStatement.setString(1, stock.getIndustryName());
@@ -41,7 +38,6 @@ public class StockRepository {
                 generatedKeys.next();
                 idIndustry = generatedKeys.getInt(1);
             } else {
-                // count ist 0 -> neue Industry wird angelegt ...
                 sql = "insert into industries (industry) values (?)";
                 preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 preparedStatement.setString(1, stock.getIndustryName());
@@ -53,19 +49,15 @@ public class StockRepository {
             }
 
             // Tabelle COMPANIES
-            int idCompany = 0;
+            int idCompany;
 
-            // Abfrage, ob die Industry schon in der Tabelle drin ist, falls ja count > 0; falls nein count 0
             sql = "select count(*) as cnt from companies where company = ? ";
-
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, stock.getCompanyName());
 
             resultSet = preparedStatement.executeQuery();
             resultSet.next();
             count = resultSet.getInt("cnt");
-
-            System.out.println("Company Count" + count); // löschen, nur zur Kontrolle!!!
 
             if (count > 0) {
                 // gib mir die ID von der COMPANY!!!
@@ -162,7 +154,7 @@ public class StockRepository {
 
     public void showID (Stock stock) throws SQLException {
 
-        // hier EINMAL den Company Namen abfragen und einmal ausgeben!!! (übersichtlichkeit und so...)
+        // hier EINMAL den Company Namen abfragen und einmal ausgeben! - nicht Teil der Aufgabe, übersichtlichkeit
         String sql = "SELECT * FROM companies WHERE idcompany = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         preparedStatement.setInt(1, stock.getCompanyID());
@@ -210,7 +202,7 @@ public class StockRepository {
 
         ResultSet resultSet = preparedStatement.executeQuery();
         resultSet.next();
-        stock.setPrice(String.valueOf(resultSet.getDouble(1)));
+        stock.setPrice(resultSet.getDouble(1));
     }
 
     public void minStock (Stock stock) throws SQLException {
@@ -222,7 +214,7 @@ public class StockRepository {
         ResultSet resultSet = preparedStatement.executeQuery();
         resultSet.next();
 
-        stock.setPrice(String.valueOf(resultSet.getDouble(1)));
+        stock.setPrice(resultSet.getDouble(1));
     }
 
     public void gapStock (Stock stock) throws SQLException {
@@ -233,7 +225,7 @@ public class StockRepository {
 
         ResultSet resultSet = preparedStatement.executeQuery();
         resultSet.next();
-        stock.setPrice(String.valueOf(resultSet.getDouble(1)));
+        stock.setPrice(resultSet.getDouble(1));
 
         double MAX = stock.getPrice();
 
@@ -247,11 +239,10 @@ public class StockRepository {
         double MIN = stock.getPrice();
 
         double priceGap = MAX - MIN;
-        stock.setPrice(String.valueOf(priceGap));
+        stock.setPrice(priceGap);
     }
 
     public void updateIndustry (Stock stock) throws SQLException {
-
 
         String sql = "SELECT * FROM industries WHERE industry = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -260,8 +251,6 @@ public class StockRepository {
         resultSet.next();
 
         stock.setIndustryID(resultSet.getInt(1));
-
-        System.out.println("test");
 
         sql = "UPDATE companies SET idindustry = ? WHERE idcompany = ?";
         preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -275,7 +264,6 @@ public class StockRepository {
         String sql = "SELECT * FROM industries";
         PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         ResultSet resultSetIndustry = preparedStatement.executeQuery();
-
 
         while (resultSetIndustry.next()) {
 

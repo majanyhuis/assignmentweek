@@ -4,13 +4,11 @@ import java.time.LocalDate;
 
 public class Stock {
 
-    // hier wird das Objekt "Stock" kreiert...
-
     protected int idStock;
 
-    protected double price; // nochmal über Datentyp nachdenken!!!
+    protected double price;
 
-    protected LocalDate date; // nochmal über Datentyp nachdenken!!!
+    protected LocalDate date;
 
     protected int CompanyID;
     protected String companyName;
@@ -32,8 +30,8 @@ public class Stock {
         return price;
     }
 
-    public void setPrice(String price) {
-        this.price = Double.parseDouble(price);
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     public LocalDate getDate() {
