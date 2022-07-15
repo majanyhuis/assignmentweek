@@ -1,0 +1,26 @@
+Workbench Tables:
+
+CREATE TABLE `stocks` (
+  `idstocks` int NOT NULL AUTO_INCREMENT,
+  `price` double DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `idcompany` int DEFAULT NULL,
+  PRIMARY KEY (`idstocks`),
+  KEY `id_idx` (`idcompany`),
+  CONSTRAINT `idcompany` FOREIGN KEY (`idcompany`) REFERENCES `companies` (`idcompany`)
+) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+CREATE TABLE `companies` (
+  `idcompany` int NOT NULL AUTO_INCREMENT,
+  `company` varchar(500) DEFAULT NULL,
+  `idindustry` int DEFAULT NULL,
+  PRIMARY KEY (`idcompany`),
+  KEY `idindustry_idx` (`idindustry`),
+  CONSTRAINT `idindustry` FOREIGN KEY (`idindustry`) REFERENCES `industries` (`idindustry`)
+
+  CREATE TABLE `industries` (
+    `idindustry` int NOT NULL AUTO_INCREMENT,
+    `industry` varchar(150) DEFAULT NULL,
+    PRIMARY KEY (`idindustry`)
+  ) ENGINE=InnoDB AUTO_INCREMENT=116 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
