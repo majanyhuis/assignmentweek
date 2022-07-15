@@ -6,7 +6,10 @@ import com.accenture.assignmentweek.repositories.StockRepository;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.Scanner;
 
 public class ImportCommando implements Commando{
@@ -44,7 +47,11 @@ public class ImportCommando implements Commando{
             setPrice(priceFromFile, stock);
 
             String dateFromFile = split[2];
-            setDate(dateFromFile, stock);
+            try {
+                setDate(dateFromFile, stock);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
 
             stock.setIndustryName(split[3]);
 
@@ -63,19 +70,18 @@ public class ImportCommando implements Commando{
         stock.setPrice(Double.parseDouble(priceFromFile));
     }
 
-    private void setDate(String dateFromFile, Stock stock) {
-        stock.setDate(simpleDateFormat);
+    private void setDate(String dateFromFile, Stock stock) throws ParseException {
 
-        String[] split2 = dateFromFile.split("\\.");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.mm.yy");
 
-        String day = split2[0];
-        String month = split2[1];
-        String year = split2[2];
+        Date date = formatter.parse(dateFromFile);
 
-        String dateNewFormat = "20" + year + "-" + month + "-" + day;
+        SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-mm-dd");
+        String finalDate = formatter1.format(date);
 
-        LocalDate localDate = LocalDate.parse(dateNewFormat);
+        LocalDate localDate = LocalDate.parse(finalDate);
         stock.setDate(localDate);
+
     }
 
     @Override

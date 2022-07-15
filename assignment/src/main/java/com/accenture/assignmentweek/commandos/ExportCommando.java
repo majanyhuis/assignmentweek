@@ -4,6 +4,7 @@ import com.accenture.assignmentweek.repositories.StockRepository;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.Scanner;
 
 public class ExportCommando implements Commando {
@@ -29,9 +30,11 @@ public class ExportCommando implements Commando {
             throw new RuntimeException(e);
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
         }
 
-        System.out.println("Your Data has been exported to the File with File-Path: " + csvFilePath);
+        System.out.println("Your Data has been exported to: " + csvFilePath);
 
     }
 

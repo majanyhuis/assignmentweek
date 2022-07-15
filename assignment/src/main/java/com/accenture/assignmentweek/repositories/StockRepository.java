@@ -6,6 +6,9 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 
 public class StockRepository {
 
@@ -246,7 +249,7 @@ public class StockRepository {
         }
     }
 
-    public void exportAllDataFromDb(String csvFilePath) throws IOException, SQLException {
+    public void exportAllDataFromDb(String csvFilePath) throws IOException, SQLException, ParseException {
 
         BufferedWriter fileWriter = new BufferedWriter(new FileWriter(csvFilePath));
 
@@ -262,6 +265,17 @@ public class StockRepository {
         while (resultSet.next()) {
             stock.setPrice(resultSet.getDouble(2));
             stock.setDateDate(resultSet.getDate(3));
+
+
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd");
+
+            String stringDate = String.valueOf(stock.getDateDate());
+
+            java.util.Date date = formatter.parse(stringDate);
+
+            SimpleDateFormat formatter1 = new SimpleDateFormat("dd.mm.yy");
+            String finalDate = formatter1.format(date);
+
 
             stock.setCompanyID(resultSet.getInt(4));
 
@@ -282,12 +296,26 @@ public class StockRepository {
 
             stock.setIndustryName(resultSetIndustry.getString(2));
 
-            String s = stock.getCompanyName() + "; " + stock.getPrice() + "; " + stock.getDateDate() + "; " + stock.getIndustryName();
+            String s = stock.getCompanyName() + "; " + stock.getPrice() + "; " + finalDate + "; " + stock.getIndustryName();
             fileWriter.newLine();
             fileWriter.write(s);
         }
 
         fileWriter.close();
+
+    }
+
+    private void dealWithDateFormat(Stock stock) throws ParseException {
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd");
+
+        String stringDate = String.valueOf(stock.getDateDate());
+
+        java.util.Date date = formatter.parse(stringDate);
+
+
+        SimpleDateFormat formatter1 = new SimpleDateFormat("dd.mm.yy");
+        String finalDate = formatter1.format(date);
 
     }
 }
