@@ -33,11 +33,13 @@ public class StockApp {
         Commando gapCommando = new GapCommando(stockRepository, scanner);
         Commando updateCommando = new UpdateCommando(stockRepository, scanner);
         Commando industryCommando = new IndustryCommando(stockRepository, scanner);
+        Commando exportCommando = new ExportCommando(stockRepository, scanner);
 
         ArrayList<Commando> commandos = new ArrayList<>();
         commandos.add(exitCommando);
         commandos.add(importCommando);
         commandos.add(deleteCommando);
+        commandos.add(deleteCommandoWithAI);
         commandos.add(searchCommando);
         commandos.add(showCommando);
         commandos.add(addCommando);
@@ -46,7 +48,7 @@ public class StockApp {
         commandos.add(gapCommando);
         commandos.add(updateCommando);
         commandos.add(industryCommando);
-        commandos.add(deleteCommandoWithAI);
+        commandos.add(exportCommando);
 
         while (true) {
             System.out.println("What do you want to do?");

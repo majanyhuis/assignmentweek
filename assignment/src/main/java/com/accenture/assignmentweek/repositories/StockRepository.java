@@ -2,7 +2,11 @@ package com.accenture.assignmentweek.repositories;
 
 import com.accenture.assignmentweek.entities.Stock;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDate;
 
 public class StockRepository {
 
@@ -16,7 +20,6 @@ public class StockRepository {
     public void importStocks(Stock stock) {
         try {
             //Tabelle INDUSTRY
-            int doesIndustryExist;
 
             // Abfrage, ob die Industry schon in der Tabelle drin ist, falls ja count > 0; falls nein count = 0
             String sql = "select count(*) as cnt from industries where industry = ?";
@@ -34,7 +37,7 @@ public class StockRepository {
 
                 ResultSet generatedKeys = preparedStatement.executeQuery();
                 generatedKeys.next();
-                doesIndustryExist = generatedKeys.getInt(1);
+                stock.setIndustryID(generatedKeys.getInt(1));
             } else {
                 sql = "insert into industries (industry) values (?)";
                 preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -43,12 +46,10 @@ public class StockRepository {
 
                 ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
                 generatedKeys.next();
-                doesIndustryExist = generatedKeys.getInt(1);
+                stock.setIndustryID(generatedKeys.getInt(1));
             }
 
             // Tabelle COMPANIES
-            int doesCompanyExist;
-
             sql = "select count(*) as cnt from companies where company = ? ";
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, stock.getCompanyName());
@@ -65,30 +66,34 @@ public class StockRepository {
 
                 ResultSet generatedKeys = preparedStatement.executeQuery();
                 generatedKeys.next();
-                doesCompanyExist = generatedKeys.getInt(1);
+                stock.setCompanyID(generatedKeys.getInt(1));
             } else {
                 // count ist 0 -> neue Company wird angelegt ...
                 sql = "insert into companies (company, idindustry) values (?, ?)";
                 preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 preparedStatement.setString(1, stock.getCompanyName());
-                preparedStatement.setInt(2, doesIndustryExist);
+                preparedStatement.setInt(2, stock.getIndustryID());
                 preparedStatement.executeUpdate();
 
-                ResultSet generatedKeys2 = preparedStatement.getGeneratedKeys();
-                generatedKeys2.next();
-                doesCompanyExist = generatedKeys2.getInt(1);
+                ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+                generatedKeys.next();
+                stock.setCompanyID(generatedKeys.getInt(1));
             }
 
-            sql = "insert into stocks (price, date, idcompany) values (?, ?, ?)";
-            preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setDouble(1, stock.getPrice());
-            preparedStatement.setDate(2, Date.valueOf(stock.getDate()));
-            preparedStatement.setInt(3, doesCompanyExist);
-            preparedStatement.executeUpdate();
+            insertStockIntoDb(stock);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void insertStockIntoDb(Stock stock) throws SQLException {
+        String sql = "insert into stocks (price, date, idcompany) values (?, ?, ?)";
+        PreparedStatement  preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.setDouble(1, stock.getPrice());
+        preparedStatement.setDate(2, Date.valueOf(stock.getDate()));
+        preparedStatement.setInt(3, stock.getCompanyID());
+        preparedStatement.executeUpdate();
     }
 
     public void deleteALL() throws SQLException {
@@ -148,6 +153,7 @@ public class StockRepository {
 
         showIdPrintCompany(stock);
         showIdPrintDateAndPrice(stock);
+
     }
 
     public void showIdPrintCompany(Stock stock) throws SQLException {
@@ -171,23 +177,25 @@ public class StockRepository {
 
         for (int i = 0; i < 10 && resultSet.next(); i++) {
             Date date = resultSet.getDate(3);
-            double price = resultSet.getDouble(2);
-            int stocksid = resultSet.getInt(1);
+            stock.setPrice(resultSet.getDouble(2));
+            stock.setIdStock(resultSet.getInt(1));
 
-            System.out.println("Date: " + date + " -> " + "Price: " + price + " € " + "(id: " + stocksid + ")");
+            System.out.println("Date: " + date + " -> " + "Price: " + stock.getPrice() + " € " + "(id: " + stock.getIdStock() + ")");
         }
     }
 
 
     public void addStock(Stock stock) throws SQLException {
 
-        String sql = "insert into stocks (price, date, idcompany) values (?, ?, ?)";
+//        String sql = "insert into stocks (price, date, idcompany) values (?, ?, ?)";
+//
+//        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+//        preparedStatement.setDouble(1, stock.getPrice());
+//        preparedStatement.setDate(2, Date.valueOf(stock.getDate()));
+//        preparedStatement.setInt(3, stock.getCompanyID());
+//        preparedStatement.executeUpdate();
 
-        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        preparedStatement.setDouble(1, stock.getPrice());
-        preparedStatement.setDate(2, Date.valueOf(stock.getDate()));
-        preparedStatement.setInt(3, stock.getCompanyID());
-        preparedStatement.executeUpdate();
+        insertStockIntoDb(stock);
 
         System.out.println("Has been added to Database.");
     }
@@ -219,12 +227,12 @@ public class StockRepository {
     public void gapStock(Stock stock) throws SQLException {
 
         maxStock(stock);
-        double MAX = stock.getPrice();
+        double maxPrice = stock.getPrice();
 
         minStock(stock);
-        double MIN = stock.getPrice();
+        double minPrice = stock.getPrice();
 
-        double priceGap = MAX - MIN;
+        double priceGap = maxPrice - minPrice;
         stock.setPrice(priceGap);
     }
 
@@ -267,4 +275,54 @@ public class StockRepository {
             System.out.println("Industry: " + stock.getIndustryName() + ", ID: " + stock.getIndustryID() + ", -> " + count);
         }
     }
+
+    public void exportAllDataFromDb(String csvFilePath) throws IOException, SQLException {
+
+        //System.out.println("Please enter the file path of the file you want to export the data to.");
+        //String csvFilePath = "C:\\Users\\maja.nyhuis\\OneDrive - Accenture\\Documents\\Jump Start\\Assignment\\ExportDataCSV.csv";
+
+        BufferedWriter fileWriter = new BufferedWriter(new FileWriter(csvFilePath));
+
+        fileWriter.write("stockname, price, price_date, industry");
+
+        Stock stock = new Stock();
+
+
+        String sql = "SELECT * FROM stocks";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        while (resultSet.next()) {
+            stock.setPrice(resultSet.getDouble(2));
+            stock.setDateDate(resultSet.getDate(3));
+
+            stock.setCompanyID(resultSet.getInt(4));
+
+            sql = "SELECT * FROM companies WHERE idcompany = ?";
+            preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setInt(1, stock.getCompanyID());
+            ResultSet resultSetCompany = preparedStatement.executeQuery();
+            resultSetCompany.next();
+
+            stock.setCompanyName(resultSetCompany.getString(2));
+            stock.setIndustryID(resultSetCompany.getInt(3));
+
+            sql = "SELECT * FROM industries WHERE idindustry = ?";
+            preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setInt(1, stock.getIndustryID());
+            ResultSet resultSetIndustry = preparedStatement.executeQuery();
+            resultSetIndustry.next();
+
+            stock.setIndustryName(resultSetIndustry.getString(2));
+
+            String s = stock.getCompanyName() + stock.getPrice() + " €"  + "; " + stock.getDateDate() + "; "  + stock.getIndustryName();
+            fileWriter.newLine();
+            fileWriter.write(s);
+        }
+
+        fileWriter.close();
+
+    }
+
+
 }

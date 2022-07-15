@@ -2,7 +2,6 @@ package com.accenture.assignmentweek.commandos;
 
 import com.accenture.assignmentweek.entities.Stock;
 import com.accenture.assignmentweek.repositories.StockRepository;
-import com.accenture.assignmentweek.services.ShowService;
 
 import java.sql.SQLException;
 import java.util.Scanner;

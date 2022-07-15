@@ -1,5 +1,6 @@
 package com.accenture.assignmentweek.entities;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 public class Stock {
@@ -9,6 +10,16 @@ public class Stock {
     protected double price;
 
     protected LocalDate date;
+
+    public Date getDateDate() {
+        return dateDate;
+    }
+
+    public void setDateDate(Date dateDate) {
+        this.dateDate = dateDate;
+    }
+
+    protected Date dateDate;
 
     protected int CompanyID;
     protected String companyName;
@@ -73,5 +84,6 @@ public class Stock {
     public void setIndustryName(String industryName) {
         this.industryName = industryName;
     }
+
 
 }
