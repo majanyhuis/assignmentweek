@@ -18,7 +18,7 @@ public class GapCommando implements Commando{
     }
 
     @Override
-    public void execute() throws FileNotFoundException {
+    public void execute() {
 
         Stock stock = new Stock();
 
@@ -27,10 +27,22 @@ public class GapCommando implements Commando{
         stock.setCompanyID(Integer.parseInt(nextString));
 
         try {
-            stockRepository.gapStock(stock);
+            stockRepository.maxStock(stock);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+        double maxPrice = stock.getPrice();
+
+        try {
+            stockRepository.minStock(stock);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        double minPrice = stock.getPrice();
+
+        double priceGap = maxPrice - minPrice;
+        stock.setPrice(priceGap);
 
         System.out.println("The difference between the highest and lowest price for the entered ID is: " + stock.getPrice() + " €.");
     }

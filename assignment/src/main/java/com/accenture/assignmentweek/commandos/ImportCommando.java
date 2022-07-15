@@ -5,6 +5,7 @@ import com.accenture.assignmentweek.repositories.StockRepository;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Scanner;
@@ -43,7 +44,11 @@ public class ImportCommando implements Commando{
 
             stock.setIndustryName(split[3]);
 
-            stockRepository.importStocks(stock);
+            try {
+                stockRepository.importStocks(stock);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

@@ -11,14 +11,6 @@ public class Stock {
 
     protected LocalDate date;
 
-    public Date getDateDate() {
-        return dateDate;
-    }
-
-    public void setDateDate(Date dateDate) {
-        this.dateDate = dateDate;
-    }
-
     protected Date dateDate;
 
     protected int CompanyID;
@@ -27,7 +19,6 @@ public class Stock {
     protected int industryID;
     protected String industryName;
 
-    // Getter und Setter
 
     public int getIdStock() {
         return idStock;
@@ -52,6 +43,15 @@ public class Stock {
     public void setDate(LocalDate date) {
         this.date = date;
     }
+
+    public Date getDateDate() {
+        return dateDate;
+    }
+
+    public void setDateDate(Date dateDate) {
+        this.dateDate = dateDate;
+    }
+
 
     public int getCompanyID() {
         return CompanyID;
