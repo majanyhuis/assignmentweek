@@ -3,11 +3,10 @@ package com.accenture.assignmentweek.commandos;
 import com.accenture.assignmentweek.entities.Stock;
 import com.accenture.assignmentweek.repositories.StockRepository;
 
-import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-public class UpdateCommando implements Commando{
+public class UpdateCommando implements Commando {
 
     private StockRepository stockRepository;
     private Scanner scanner;
@@ -18,7 +17,7 @@ public class UpdateCommando implements Commando{
     }
 
     @Override
-    public void execute() throws FileNotFoundException {
+    public void execute() {
 
         Stock stock = new Stock();
 

@@ -6,7 +6,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.*;
-import java.time.LocalDate;
 
 public class StockRepository {
 
@@ -251,7 +250,7 @@ public class StockRepository {
 
         BufferedWriter fileWriter = new BufferedWriter(new FileWriter(csvFilePath));
 
-        fileWriter.write("stockname, price, price_date, industry");
+        fileWriter.write("stockname; price; price_date; industry");
 
         Stock stock = new Stock();
 
@@ -283,7 +282,7 @@ public class StockRepository {
 
             stock.setIndustryName(resultSetIndustry.getString(2));
 
-            String s = stock.getCompanyName() + stock.getPrice() + " €" + "; " + stock.getDateDate() + "; " + stock.getIndustryName();
+            String s = stock.getCompanyName() + "; " + stock.getPrice() + "; " + stock.getDateDate() + "; " + stock.getIndustryName();
             fileWriter.newLine();
             fileWriter.write(s);
         }

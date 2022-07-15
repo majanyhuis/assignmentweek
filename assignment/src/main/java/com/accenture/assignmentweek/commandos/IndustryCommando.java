@@ -18,7 +18,7 @@ public class IndustryCommando implements Commando {
     }
 
     @Override
-    public void execute() throws FileNotFoundException {
+    public void execute() {
 
         Stock stock = new Stock();
 

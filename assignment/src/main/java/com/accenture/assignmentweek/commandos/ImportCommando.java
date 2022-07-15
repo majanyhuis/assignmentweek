@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Scanner;
 
 public class ImportCommando implements Commando{
@@ -22,10 +21,15 @@ public class ImportCommando implements Commando{
         this.scanner = scanner;
     }
 
-    public void execute() throws FileNotFoundException {
+    public void execute() {
 
-        Scanner input = new Scanner(new File("C:\\Users\\maja.nyhuis\\OneDrive - Accenture\\Documents\\Jump Start\\Assignment\\STOCK_DATA_3.csv"));
-                input.nextLine();
+        Scanner input = null;
+        try {
+            input = new Scanner(new File("C:\\Users\\maja.nyhuis\\OneDrive - Accenture\\Documents\\Jump Start\\Assignment\\STOCK_DATA_3.csv"));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        input.nextLine();
 
         while (input.hasNext()) {
 

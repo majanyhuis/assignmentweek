@@ -2,12 +2,11 @@ package com.accenture.assignmentweek.commandos;
 
 import com.accenture.assignmentweek.repositories.StockRepository;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-public class ExportCommando implements Commando{
+public class ExportCommando implements Commando {
 
     private StockRepository stockRepository;
     private Scanner scanner;
@@ -18,7 +17,7 @@ public class ExportCommando implements Commando{
     }
 
     @Override
-    public void execute() throws FileNotFoundException {
+    public void execute() {
 
         System.out.println("Please enter the File-Path of the file you want to export the data to.");
         String csvFilePath = scanner.nextLine();

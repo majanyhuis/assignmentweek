@@ -4,16 +4,16 @@ import com.accenture.assignmentweek.repositories.StockRepository;
 
 import java.sql.SQLException;
 
-public class DeleteCommandoWithAI implements Commando{
+public class DeleteCommandoWithAI implements Commando {
 
     private StockRepository stockRepository;
 
-    public DeleteCommandoWithAI (StockRepository stockRepository) {
+    public DeleteCommandoWithAI(StockRepository stockRepository) {
         this.stockRepository = stockRepository;
     }
 
     @Override
-    public void execute () {
+    public void execute() {
 
         try {
             stockRepository.deleteAllWithAutoIncrement();

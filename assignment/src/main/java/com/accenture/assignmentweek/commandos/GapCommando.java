@@ -3,11 +3,10 @@ package com.accenture.assignmentweek.commandos;
 import com.accenture.assignmentweek.entities.Stock;
 import com.accenture.assignmentweek.repositories.StockRepository;
 
-import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-public class GapCommando implements Commando{
+public class GapCommando implements Commando {
 
     private StockRepository stockRepository;
     private Scanner scanner;

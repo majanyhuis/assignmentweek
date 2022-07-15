@@ -5,12 +5,12 @@ import com.accenture.assignmentweek.repositories.StockRepository;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-public class SearchCommando implements Commando{
+public class SearchCommando implements Commando {
 
     private StockRepository stockRepository;
     private Scanner scanner;
 
-    public SearchCommando (StockRepository stockRepository, Scanner scanner) {
+    public SearchCommando(StockRepository stockRepository, Scanner scanner) {
         this.stockRepository = stockRepository;
         this.scanner = scanner;
     }
@@ -20,7 +20,7 @@ public class SearchCommando implements Commando{
 
         System.out.println("Type a letter: ");
         String searchInput = scanner.nextLine();
-        searchInput =  searchInput + "%";
+        searchInput = searchInput + "%";
 
         try {
             stockRepository.searchCompany(searchInput);

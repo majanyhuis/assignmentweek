@@ -3,7 +3,6 @@ package com.accenture.assignmentweek.commandos;
 import com.accenture.assignmentweek.entities.Stock;
 import com.accenture.assignmentweek.repositories.StockRepository;
 
-import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Scanner;
@@ -20,7 +19,7 @@ public class AddCommando implements Commando {
 
 
     @Override
-    public void execute() throws FileNotFoundException {
+    public void execute() {
 
         Stock stock = new Stock();
 
@@ -32,7 +31,7 @@ public class AddCommando implements Commando {
         nextString = scanner.nextLine();
         stock.setDate(LocalDate.parse(nextString));
 
-        System.out.println("Last enter the price in format 'XXXX.XX'"); // vielleicht eher enter price und wenn nicht das format, dann sagen in welchem??
+        System.out.println("Last enter the price in format 'XXXX.XX'");
         nextString = scanner.nextLine();
         stock.setPrice(Double.parseDouble(nextString));
 

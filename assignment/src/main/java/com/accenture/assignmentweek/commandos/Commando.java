@@ -1,11 +1,9 @@
 package com.accenture.assignmentweek.commandos;
 
-import java.io.FileNotFoundException;
-
 public interface Commando {
 
-     void execute() throws FileNotFoundException; //throws SQLException;
+    void execute();
 
-      boolean shouldExecute(String commandoName);
+    boolean shouldExecute(String commandoName);
 
 }

@@ -20,7 +20,7 @@ public class DeleteCommando implements Commando  {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("All data has been removed from database.");
+        System.out.println("All data has been removed from database. Start with 'import'.");
     }
 
     @Override

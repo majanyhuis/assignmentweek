@@ -4,7 +4,6 @@ import com.accenture.assignmentweek.commandos.*;
 import com.accenture.assignmentweek.connector.Connector;
 import com.accenture.assignmentweek.repositories.StockRepository;
 
-import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ import java.util.Scanner;
 
 public class StockApp {
 
-    public void run() throws SQLException, FileNotFoundException {
+    public void run() throws SQLException {
 
         Scanner scanner = new Scanner(System.in);
 
@@ -53,7 +52,7 @@ public class StockApp {
         while (true) {
             System.out.println("What do you want to do?");
             System.out.println("Choose from the following commands: exit, import, delete, delete with AI, search, show, " +
-                    "add, max, min, gap, update, industry? ");
+                    "add, max, min, gap, update, industry, export? ");
             String userInput = scanner.nextLine();
 
             for (Commando commando : commandos) {
@@ -64,9 +63,9 @@ public class StockApp {
         }
     }
 
-    public static void main(String[] args) throws FileNotFoundException, SQLException {
+    public static void main(String[] args) throws SQLException {
         StockApp stockApp = new StockApp();
         stockApp.run();
-        }
     }
+}
 
